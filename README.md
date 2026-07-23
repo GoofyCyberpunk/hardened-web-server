@@ -1,18 +1,16 @@
 # hardened-web-server
-Hardened Ubuntu Server setup with SSH key auth, firewall, and Fail2ban
+Hardened Ubuntu Server setup with SSH key auth, firewall, and Fail2ban and a self-hosted nginx webpage.
 
-Projekt in Arbeit - Ziel: ein Ubuntu-Server aufsetzten und absichern.
+![Screenshot der Webseite](screenshot.png)
+
+Projekt abgeschlossen – Ziel war es, einen Ubuntu-Server aufzusetzen, abzusichern 
+und einen erreichbaren Webserver mit eigener Seite zu betreiben.
 
 - [X] SSH-Key-Auth einrichten, Passwort-Login deaktivieren
-- [ ] Firewall (ufw) konfigurieren
-- [ ] Fail2ban installieren und konfigurieren
-- [ ] nginx installieren
-
-## Notizen
-(folgt während der Arbeit)
-
-Virtual box heruntergeladen
-ubuntu-26.04-live-server-amd64.iso heruntergeladen für die VM
+- [X] Firewall (ufw) konfigurieren
+- [X] Fail2ban installieren und konfigurieren
+- [X] nginx installieren
+- [X] Eigene Webseite mit Bild einrichten
 
 ## VM Setup — Ubuntu Server (VirtualBox)
 
@@ -49,7 +47,7 @@ ubuntu-26.04-live-server-amd64.iso heruntergeladen für die VM
 - Verifiziert: Verbindungsversuch mit `-o PubkeyAuthentication=no` wird jetzt 
   korrekt mit "Permission denied (publickey)" abgelehnt
 
-  ## Firewall (ufw)
+## Firewall (ufw)
 
 - ufw Status geprüft, war zunächst inaktiv
 - SSH (Port 22 / OpenSSH) vor Aktivierung erlaubt, um Aussperren zu vermeiden
@@ -87,3 +85,14 @@ ubuntu-26.04-live-server-amd64.iso heruntergeladen für die VM
   und echte Datei korrekt nach /var/www/html/ verschoben
 - Bild in index.html per <img>-Tag eingebunden
 - Getestet und sichtbar unter http://192.168.1.158
+
+## Was ich dabei gelernt habe
+
+- SSH-Konfigurationen können durch zusätzliche Dateien in sshd_config.d/ 
+  überschrieben werden — wichtig, nicht nur die Hauptdatei zu prüfen
+- Fail2ban-Konfigurationsdateien sollten bestehende Sektionen bearbeiten, 
+  statt neue mit gleichem Namen anzulegen
+- Die Reihenfolge beim Firewall-Aufbau ist entscheidend: SSH immer VOR der 
+  Aktivierung erlauben, um sich nicht selbst auszusperren
+- Debugging-Workflow: systemctl status → journalctl -u <service> → 
+  gezielt die fehlerhafte Config-Zeile finden
