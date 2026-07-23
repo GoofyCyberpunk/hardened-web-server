@@ -3,7 +3,7 @@ Hardened Ubuntu Server setup with SSH key auth, firewall, and Fail2ban
 
 Projekt in Arbeit - Ziel: ein Ubuntu-Server aufsetzten und absichern.
 
-- [ ] SSH-Key-Auth einrichten, Passwort-Login deaktivieren
+- [X] SSH-Key-Auth einrichten, Passwort-Login deaktivieren
 - [ ] Firewall (ufw) konfigurieren
 - [ ] Fail2ban installieren und konfigurieren
 - [ ] nginx installieren
@@ -48,3 +48,20 @@ ubuntu-26.04-live-server-amd64.iso heruntergeladen für die VM
 - Fix: Wert auch in dieser Datei auf "no" geändert, SSH-Dienst neu gestartet
 - Verifiziert: Verbindungsversuch mit `-o PubkeyAuthentication=no` wird jetzt 
   korrekt mit "Permission denied (publickey)" abgelehnt
+
+  ## Firewall (ufw)
+
+- ufw Status geprüft, war zunächst inaktiv
+- SSH (Port 22 / OpenSSH) vor Aktivierung erlaubt, um Aussperren zu vermeiden
+- ufw aktiviert (`sudo ufw enable`)
+- HTTP (80) und HTTPS (443) zusätzlich freigegeben, für späteren nginx-Webserver
+- Doppelte Regel (OpenSSH + separates Port-22-Allow) bereinigt
+- Ergebnis: nur 22, 80, 443 offen, alles andere standardmässig blockiert
+
+## nginx Webserver
+
+- nginx installiert via `sudo apt install nginx`
+- Dienst läuft automatisch nach Installation (systemd-Service aktiv)
+- Erreichbarkeit getestet: http://192.168.1.158 zeigt nginx-Standardseite
+- Zugriff funktioniert dank zuvor konfigurierter ufw-Regeln (Port 80 offen)
+
