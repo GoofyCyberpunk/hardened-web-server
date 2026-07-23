@@ -65,3 +65,25 @@ ubuntu-26.04-live-server-amd64.iso heruntergeladen für die VM
 - Erreichbarkeit getestet: http://192.168.1.158 zeigt nginx-Standardseite
 - Zugriff funktioniert dank zuvor konfigurierter ufw-Regeln (Port 80 offen)
 
+## Fail2ban
+
+- Fail2ban installiert via `sudo apt install fail2ban`
+- jail.local aus jail.conf kopiert (Standard-Vorgehen, um Updates nicht zu überschreiben)
+- Erster Versuch: neue [sshd]-Sektion eingefügt → Fehler "section already exists", 
+  da bereits eine [sshd]-Sektion in der Vorlage existierte
+- Datei zurückgesetzt (`cp jail.conf jail.local`), diesmal die vorhandene 
+  [sshd]-Sektion direkt bearbeitet statt eine neue zu erstellen
+- Konfiguriert: enabled = true, maxretry = 3, bantime = 600
+- Fail2ban neu gestartet, läuft stabil
+- Verifiziert mit `fail2ban-client status sshd`: Jail aktiv, überwacht SSH-Logins
+
+## Eigenes Bild eingebunden
+
+- Bild lokal auf dem eigenen Notebook heruntergeladen
+- Von dort per `scp` auf die VM übertragen (nach /tmp/)
+- Erster wget-Versuch (fälschlich mit Dateinamen statt echter URL) fehlgeschlagen, 
+  dabei leere wallpaper.jpg-Datei im Webroot zurückgelassen
+- Eigentliche Bilddatei lag noch in /tmp/, leere Datei im Webroot gelöscht 
+  und echte Datei korrekt nach /var/www/html/ verschoben
+- Bild in index.html per <img>-Tag eingebunden
+- Getestet und sichtbar unter http://192.168.1.158
